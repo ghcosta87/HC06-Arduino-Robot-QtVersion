@@ -1,0 +1,31 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainPage.qml</file>
+        <file>MyComponents/MyButton.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>MyComponents/SignalStrength.qml</file>
+        <file>MyComponents/BatteryLevel.qml</file>
+        <file>MyComponents/MySlider.qml</file>
+        <file>MyComponents/TextView.qml</file>
+        <file>MyComponents/JoystickTwoButtonContainer.qml</file>
+        <file>Font/Roboto-Condensed.ttf</file>
+        <file>Font/Roboto-LightItalic.ttf</file>
+        <file>Font/Roboto-Regular.ttf</file>
+        <file>Font/Roboto-Thin.ttf</file>
+        <file>TestComponent.qml</file>
+        <file>Images/BaterryPngSet/batt_1.png</file>
+        <file>Images/BaterryPngSet/batt_2.png</file>
+        <file>Images/BaterryPngSet/batt_3.png</file>
+        <file>Images/BaterryPngSet/batt_4.png</file>
+        <file>Images/BatterySvgSet/batt_0.svg</file>
+        <file>Images/BatterySvgSet/batt_1.svg</file>
+        <file>Images/BatterySvgSet/batt_2.svg</file>
+        <file>Images/BatterySvgSet/batt_3.svg</file>
+        <file>Images/BatterySvgSet/batt_4.svg</file>
+        <file>Images/BaterryPngSet/batt_0.png</file>
+        <file>MyComponents/BluetoothStatus.qml</file>
+        <file>Images/Bluetooth/roundBluetooth.svg</file>
+        <file>Images/Bluetooth/roundBluetoothConnected.svg</file>
+    </qresource>
+</RCC>
