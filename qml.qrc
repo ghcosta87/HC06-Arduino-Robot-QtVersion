@@ -27,5 +27,6 @@
         <file>MyComponents/BluetoothStatus.qml</file>
         <file>Images/Bluetooth/roundBluetooth.svg</file>
         <file>Images/Bluetooth/roundBluetoothConnected.svg</file>
+        <file>MyComponents/MyJoystick.qml</file>
     </qresource>
 </RCC>
