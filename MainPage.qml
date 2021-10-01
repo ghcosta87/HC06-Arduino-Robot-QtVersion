@@ -5,51 +5,9 @@ import QtQuick.Controls.Material 2.12
 import "qrc:/MyComponents/"
 
 Item {
+    id: mainPageRoot
     anchors.fill: parent
     property var defaultMargin: parent.width * 0.02
-
-    Component.onCompleted: {
-        themeSet(false)
-        waitingDevice()
-    }
-
-    Timer{
-        id: tmp
-        interval: 5000
-        repeat: false
-        onTriggered: run.connectToDevice()
-    }
-
-    Timer {
-        id: startLoop
-        interval: 500
-        repeat: true
-        onTriggered: {
-            if (run.connectionStatus()) {
-                startLoop.stop()
-                readLoop.start()
-                busyIndicator.running = false
-                busyContainer.visible=false
-                themeSelector.checkable=true
-                connectButton.clickBlock=true
-                readButton.clickBlock=true
-                directionJoystick.clickBlock=true
-                senseJoystick.clickBlock=true
-                bleIcon.bleStatus=true
-            }
-        }
-    }
-
-    Timer {
-        id: readLoop
-        interval: 500
-        repeat: true
-        onTriggered: {
-            if(!run.connectionStatus())waitingDevice()
-            batteryLevel.battLevel=run.readData('batt')
-            bleIcon.bleStatus=run.readData('ble')
-        }
-    }
 
     function waitingDevice(){
         busyIndicator.running = true
@@ -74,6 +32,59 @@ Item {
             Material.accent = Material.Purple
             theme='night'
         }
+    }
+
+    Component.onCompleted: {
+        themeSet(false)
+        waitingDevice()
+    }
+
+    Rectangle{
+        id:timers
+        visible: false
+        Timer{
+            id: tmp
+            interval: 5000
+            repeat: false
+            onTriggered: run.connectToDevice()
+        }
+
+        Timer {
+            id: startLoop
+            interval: 500
+            repeat: true
+            onTriggered: {
+                if (run.connectionStatus()) {
+                    startLoop.stop()
+                    readLoop.start()
+                    busyIndicator.running = false
+                    busyContainer.visible=false
+                    themeSelector.checkable=true
+                    connectButton.clickBlock=true
+                    readButton.clickBlock=true
+                    directionJoystick.clickBlock=true
+                    senseJoystick.clickBlock=true
+                    bleIcon.bleStatus=true
+                }
+            }
+        }
+
+        Timer {
+            id: readLoop
+            interval: 500
+            repeat: true
+            onTriggered: {
+                if(!run.connectionStatus())waitingDevice()
+                batteryLevel.battLevel=run.readData('batt')
+                bleIcon.bleStatus=run.readData('ble')
+            }
+        }
+
+    }
+
+    Pane{
+        id:backgroundPanel
+        anchors.fill: parent
     }
 
     Pane{
@@ -128,6 +139,7 @@ Item {
     }
 
     Pane {
+        visible: false
         anchors.fill: parent
         anchors.topMargin: topToolBar.height
 
@@ -198,51 +210,21 @@ Item {
             }
 
         }
-        //        Slider {
-        //            id: slider
-        //            to:100
-        //            stepSize: 5
-        //            value:10
-        //            width: directionJoystick.width
-        //            anchors{
-        //                bottom: directionJoystick.top
+
+        //        JoystickTwoButtonContainer {
+        //            id: directionJoystick
+        //            defaultHeight: connectButton.height * 2
+        //            defaultWidth: connectButton.width * 2
+        //            anchors {
         //                left: parent.left
-        //                bottomMargin: defaultMargin*3
-        //                leftMargin: defaultMargin
+        //                bottom: parent.bottom
         //            }
-        //            onValueChanged: {run.writeToDevice(slider.value)}
+        //            onLeftPress: run.writeToDevice('L')
+        //            onRightPress: run.writeToDevice('R')
+        //            onButtonReleased: run.writeToDevice('N')
         //        }
 
-        JoystickTwoButtonContainer {
-            id: directionJoystick
-            defaultHeight: connectButton.height * 2
-            defaultWidth: connectButton.width * 2
-            anchors {
-                left: parent.left
-                bottom: parent.bottom
-            }
-            onLeftPress: run.writeToDevice('L')
-            onRightPress: run.writeToDevice('R')
-            onButtonReleased: run.writeToDevice('N')
-        }
 
-        JoystickTwoButtonContainer {
-            id: senseJoystick
-            rotation: 90
-            transformOrigin: Item.BottomRight
-            defaultHeight: connectButton.height * 2
-            defaultWidth: connectButton.width * 2
-            anchors {
-                right: parent.right
-                bottom: parent.bottom
-                rightMargin: 110
-                //145 (defaultMargin * 12)
-                //9 ( parent.height * 0.01 )
-            }
-            onLeftPress: run.writeToDevice('F')
-            onRightPress: run.writeToDevice('B')
-            onButtonReleased: run.writeToDevice('n')
-        }
     }
 
     Rectangle{
@@ -258,11 +240,64 @@ Item {
             }
         }
     }
-}
 
+    Pane {
+        id: rightPanel
+        width: height
+        height: 10
+        anchors.top: configPanel.bottom
+        anchors.topMargin: 0
+        anchors{
+            right: parent.right
+            bottom: parent.bottom
+            leftMargin: 0
+            bottomMargin: 0
+        }
+        JoystickTwoButtonContainer {
+            id: senseJoystick
+            width: parent.width
+            height: 0
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            rotation: -45
+            transformOrigin: Item.Center
+            defaultHeight: connectButton.height * 2
+            defaultWidth: connectButton.width * 2
+            onLeftPress: run.writeToDevice('B')
+            onRightPress: run.writeToDevice('F')
+            onButtonReleased: run.writeToDevice('n')
+        }
+    }
 
-/*##^##
-Designer {
-    D{i:0;autoSize:true;formeditorZoom:0.8999999761581421;height:480;width:640}
+    Pane {
+        id: leftPanel
+        width: height
+        anchors.top: configPanel.bottom
+        anchors.topMargin: 0
+        anchors{
+            left: parent.left
+            bottom: parent.bottom
+            leftMargin: 0
+            bottomMargin: 0
+        }
+        MyJoystick{
+            id:directionJoystick
+            width: parent.width*0.4
+            height: width
+            anchors.fill: parent
+            onLeftPressed: run.writeToDevice('L')
+            onLeftPressReleased: run.writeToDevice('C')
+            onRightPressed:run.writeToDevice('R')
+            onRightPressReleased: run.writeToDevice('C')
+        }
+    }
+
+    Pane {
+        id: configPanel
+        height: parent.height*0.2
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: topToolBar.bottom
+        anchors.topMargin: 0
+    }
 }
-##^##*/
