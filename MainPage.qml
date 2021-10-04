@@ -227,19 +227,6 @@ Item {
 
     }
 
-    Rectangle{
-        id:busyContainer
-        anchors.fill: parent
-        color: "black"
-        opacity: 0.6
-        BusyIndicator {
-            id: busyIndicator
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                verticalCenter: parent.verticalCenter
-            }
-        }
-    }
 
     Pane {
         id: rightPanel
@@ -289,6 +276,8 @@ Item {
             onLeftPressReleased: run.writeToDevice('C')
             onRightPressed:run.writeToDevice('R')
             onRightPressReleased: run.writeToDevice('C')
+            onBottomPressed:run.writeToDevice('S')
+            onBottomPressReleased: run.writeToDevice('s')
         }
     }
 
@@ -299,5 +288,19 @@ Item {
         anchors.right: parent.right
         anchors.top: topToolBar.bottom
         anchors.topMargin: 0
+    }
+
+    Rectangle{
+        id:busyContainer
+        anchors.fill: parent
+        color: "black"
+        opacity: 0.6
+        BusyIndicator {
+            id: busyIndicator
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+            }
+        }
     }
 }
