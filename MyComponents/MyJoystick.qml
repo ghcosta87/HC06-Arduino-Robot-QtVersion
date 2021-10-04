@@ -185,13 +185,13 @@ Item {
                      right:parent.right
                     }
                     onPressed: {
-                        root.leftPressed()
+                        root.rightPressed()
                         pressed ? rightArrow.fillColor='#777777' : rightArrow.fillColor='#333333'
                         pressed ? rightArrowShadow.fillColor='#BBBBBB' : rightArrowShadow.fillColor='#444444'
                         pressed ? verticalBackgroundRightMask.color='#BBBBBB' : verticalBackgroundRightMask.color='#444444'
                     }
                     onReleased: {
-                        root.leftPressReleased()
+                        root.rightPressReleased()
                         released ? (rightArrow.fillColor='#333333') : (rightArrow.fillColor='#777777')
                         pressed ? rightArrowShadow.fillColor='#BBBBBB' : rightArrowShadow.fillColor='#444444'
                         pressed ? verticalBackgroundRightMask.color='#BBBBBB' : verticalBackgroundRightMask.color='#444444'
