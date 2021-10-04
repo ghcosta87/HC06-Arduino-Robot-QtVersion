@@ -54,13 +54,25 @@ Item {
                 }
                 RoundButton {
                     id: leftArrow
-                    text: "<"
+                    Text {
+                        id:leftText
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "↓"
+                        rotation: 45
+                        font.pixelSize: height
+                        color: 'white'
+                    }
                     anchors{
                         fill: parent
                         margins: width*0.1
                     }
-                    onPressed: root.leftPress()
-                    onReleased: root.buttonReleased()
+                    onPressed: {root.leftPress()
+                        leftText.color='black'
+                    }
+                    onReleased: {root.buttonReleased()
+                        leftText.color='white'
+                    }
                     visible: clickBlock
                 }
             }
@@ -88,13 +100,27 @@ Item {
 
                 RoundButton {
                     id: rightArrow
-                    text: ">"
+                    Text {
+                        id:rightText
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "↑"
+                        rotation: 45
+                        font.pixelSize: height
+                        color: 'white'
+                    }
                     anchors{
                         fill: parent
                         margins: parent.height * 0.05
                     }
-                    onPressed: root.rightPress()
-                    onReleased: root.buttonReleased()
+                    onPressed: {
+                        rightText.color='black'
+                        root.rightPress()
+                    }
+                    onReleased: {
+                            rightText.color='white'
+                            root.buttonReleased()
+                        }
                     visible: clickBlock
                 }
             }
