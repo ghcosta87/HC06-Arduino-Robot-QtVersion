@@ -23,6 +23,7 @@ void ble_interface::connectToDevice()
 {
     static const QString serviceUuid(QStringLiteral("00001101-0000-1000-8000-00805F9B34FB"));//00001101-0000-1000-8000-00805F9B34FB
     socket->connectToService(QBluetoothAddress("98:DA:60:00:CA:C3"), QBluetoothUuid(serviceUuid), QIODevice::ReadWrite);
+    qDebug()<<"ANDROIDDEBUG >> TRYING TO CONNECT ......";
 }
 
 void ble_interface::writeToDevice(QString input)
@@ -37,21 +38,34 @@ void ble_interface::writeToDevice(QString input)
 
 QString ble_interface::readData(QString deviceToRecord)
 {
+    //D libhc05_remote_controller_armeabi-v7a.so: ANDROIDDEBUG charReceived >  ("d", "29", "v", "0")
+    //salvar essa leitura no buff
+    
     readBufferData();
     QStringList charReceived;
+    charReceived=bufferData.split(' ');
+    receivedData=bufferData.split(' ');
+
+    qDebug()<<"ANDROIDDEBUG deviceToRecord > "<<deviceToRecord;
+    qDebug()<<"ANDROIDDEBUG charReceived > "<<charReceived;
+
+    if(charReceived.length()<3)return " ";
 
     if(deviceToRecord=="batt")
-        charReceived=bufferData.split('v');
+        return charReceived[3];
+    //            charReceived=bufferData.split('v');
 
-    if(deviceToRecord=="ble")
-        charReceived=bufferData.split('b');
+    //        if(deviceToRecord=="ble")
+    //            charReceived=bufferData.split('b');
 
-    qDebug()<<"ANDROIDDEBUG > "<<charReceived;
-
-    if(charReceived.length()>1){
-        qDebug()<<"ANDROIDDEBUG char > "<< charReceived[1];
+    if(deviceToRecord=="distance")
         return charReceived[1];
-    }
+    //            charReceived=bufferData.split('d');
+
+    //    if(charReceived.length()>1){
+    //        qDebug()<<"ANDROIDDEBUG char > to "<<deviceToRecord<< " "<<charReceived[1];
+    //        return charReceived[1];
+    //    }
 
     return " ";
 }
@@ -63,6 +77,30 @@ void ble_interface::deviceDiscovered(const QBluetoothDeviceInfo &device)
     qDebug() << "ANDROIDDEBUG: Found new device:" << device.name() << '(' << device.address().toString() << ')'
              << device.serviceUuids()<<"\n"<<device.serviceClasses()
              <<"\n"<<device.rssi()<<"\n"<<device.coreConfigurations();
+}
+
+QStringList ble_interface::getReceivedData()
+{
+    // On the heap (deleted when this object is deleted)
+    //    QAccelerometer *sensor = new QAccelerometer(this);
+
+    //    // On the stack (deleted when the current scope ends)
+//    //    QOrientationSensor orient_sensor;
+
+//    QSensor sensor("QAccelerometer");
+//    sensor.start();
+
+//    // later
+//    QSensorReading *reading = sensor.reading();
+//    qreal x = reading->property("x").value<qreal>();
+//    qreal y = reading->value(1).value<qreal>();
+
+//    qDebug()<<"SENSORSTEST >> x~"<<x<<" y~"<<y;
+
+    readBufferData();
+    receivedData=bufferData.split(' ');
+    qDebug()<<"ANDROIDDEBUG receivedData > "<<receivedData;
+    return receivedData;
 }
 
 void ble_interface::readBufferData()
