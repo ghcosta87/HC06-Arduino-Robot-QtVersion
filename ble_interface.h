@@ -7,6 +7,7 @@
 #include <string>
 #include <QDebug>
 #include <QString>
+#include <QtSensors/QAccelerometer>
 
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QBluetoothSocket>
@@ -23,10 +24,15 @@ public:
     Q_INVOKABLE bool connectionStatus();
 
 //    Q_INVOKABLE bool checkAvailableDevices();
+    Q_INVOKABLE QStringList getReceivedData();
+
 private slots:
     void deviceDiscovered(const QBluetoothDeviceInfo &device);
 
 private:
+    QStringList receivedData;
+
+
     void setConnectionStatus();
     void readBufferData();
     QString bufferData;
