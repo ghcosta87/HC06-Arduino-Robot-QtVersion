@@ -44,7 +44,7 @@ Item {
         visible: false
         Timer{
             id: tmp
-            interval: 5000
+            interval: 2000
             repeat: false
             onTriggered: run.connectToDevice()
         }
@@ -75,8 +75,17 @@ Item {
             repeat: true
             onTriggered: {
                 if(!run.connectionStatus())waitingDevice()
-                batteryLevel.battLevel=run.readData('batt')
-                bleIcon.bleStatus=run.readData('ble')
+                let bleData=run.getReceivedData();
+                try{
+                    if(bleData.length>4){
+                        console.log('MYDATA >> '+bleData)
+                        batteryLevel.battLevel=bleData[5]
+                        bleIcon.bleStatus=0
+                        myTextDebug.text=bleData[1]+' cm '+bleData[3]
+                    }
+                }catch(e){
+                    console.log('MY ERROR >>> '+e)
+                }
             }
         }
 
@@ -302,5 +311,25 @@ Item {
                 verticalCenter: parent.verticalCenter
             }
         }
+    }
+
+    Button{
+        id:test
+        width: 150
+        height: 50
+        onPressed:run.writeToDevice('S')
+        onReleased: run.writeToDevice('s')
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    Text {
+        id: myTextDebug
+        x: 231
+        y: 54
+        width: 200
+        height: 100
+        font.pointSize: 30
+        color: 'white'
     }
 }
